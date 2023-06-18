@@ -17,15 +17,19 @@ export function fetcher<T>(
         Authorization: `Bearer ${config.apiKey}`,
       },
     })
-      .then((res) =>
-        res.json().then((data) => {
-          if (res.ok) {
-            resolve(data.data as T);
-          } else {
-            reject(data as ErrorResponse);
-          }
-        })
-      )
+      .then((res) => {
+        if (res.status === 204 || method === "DELETE") {
+          resolve(null as T);
+        } else {
+          res.json().then((data) => {
+            if (res.ok) {
+              resolve(data.data as T);
+            } else {
+              reject(data as ErrorResponse);
+            }
+          });
+        }
+      })
       .catch((error) => {
         reject(error);
       });
