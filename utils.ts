@@ -20,7 +20,7 @@ export function fetcher<T>(
       .then((res) =>
         res.json().then((data) => {
           if (res.ok) {
-            resolve(data as T);
+            resolve(data.data as T);
           } else {
             reject(data as ErrorResponse);
           }
