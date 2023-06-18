@@ -69,6 +69,10 @@ export interface SSHKey {
   public_key: string;
 }
 
+export interface SSHKeyWithPrivateKey extends SSHKey {
+  private_key: string;
+}
+
 export interface LaunchInstanceConfiguration {
   region_name: string;
   instance_type_name: string;
@@ -84,7 +88,7 @@ export interface LaunchInstance {
 
 export interface AddSSHKeyConfiguration {
   name: string;
-  public_key: string;
+  public_key?: string;
 }
 
 export interface User {
@@ -163,8 +167,10 @@ export class LambdaCloudAPI extends BaseAPI {
     return fetcher<SSHKey[]>(this.configuration, "/ssh-keys", "GET");
   }
 
-  async addSSHKey(config: AddSSHKeyConfiguration): Promise<SSHKey> {
-    return fetcher<SSHKey>(
+  async addSSHKey(
+    config: AddSSHKeyConfiguration
+  ): Promise<SSHKeyWithPrivateKey | SSHKey> {
+    return fetcher<SSHKey | SSHKeyWithPrivateKey>(
       this.configuration,
       "/ssh-keys",
       "POST",
