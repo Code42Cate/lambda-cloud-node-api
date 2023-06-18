@@ -1,6 +1,6 @@
 {
   "name": "lambda-cloud-node-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Unofficial Node.js client for the Lambda Cloud API",
   "main": "dist/index.js",
   "repository": {
@@ -12,6 +12,11 @@
     "prepublish": "tsc",
     "build": "tsc"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "keywords": [
     "lambdalabs",
     "lambda",
