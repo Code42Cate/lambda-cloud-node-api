@@ -118,12 +118,8 @@ export class LambdaCloudAPI extends BaseAPI {
     );
   }
 
-  async listRunningInstances(): Promise<ListRunningInstances> {
-    return fetcher<ListRunningInstances>(
-      this.configuration,
-      "/instances",
-      "GET"
-    );
+  async listRunningInstances(): Promise<RunningInstance[]> {
+    return fetcher<RunningInstance[]>(this.configuration, "/instances", "GET");
   }
 
   async getRunningInstance(id: string): Promise<GetRunningInstance> {
@@ -152,7 +148,7 @@ export class LambdaCloudAPI extends BaseAPI {
     );
   }
 
-  async restartInstances(instanceIds: string[] | string): Promise<string[]> {
+  async restartInstances(instanceIds: string[]): Promise<string[]> {
     return fetcher<string[]>(
       this.configuration,
       "/instance-operations/restart",
