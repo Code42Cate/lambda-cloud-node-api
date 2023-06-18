@@ -116,6 +116,11 @@ export interface TerminatedInstances {
 }
 
 export class LambdaCloudAPI extends BaseAPI {
+  /**
+   * List instance types
+   * @returns list of instance types, or an empty array if there are none
+   * @throws {ErrorResponse} if missing permissions
+   */
   async listInstanceTypes(): Promise<ListInstanceTypes> {
     return fetcher<ListInstanceTypes>(
       this.configuration,
@@ -124,14 +129,31 @@ export class LambdaCloudAPI extends BaseAPI {
     );
   }
 
+  /**
+   * List running instances
+   * @returns list of running instances, or an empty array if there are none
+   */
   async listRunningInstances(): Promise<Instance[]> {
     return fetcher<Instance[]>(this.configuration, "/instances", "GET");
   }
 
+  /**
+   * Get a running instance by ID
+   * @param id the ID of the instance to get
+   * @returns the instance, or null if it does not exist
+   * @throws {ErrorResponse} if the instance does not exist
+   */
   async getRunningInstance(id: string): Promise<Instance> {
     return fetcher<Instance>(this.configuration, `/instances/${id}`, "GET");
   }
 
+  /**
+   * Launch instances
+   * @param config instance configuration
+   * @returns object with list of launched instances
+   * @throws {ErrorResponse} if invalid parameters or missing permissions
+   * @throws {ErrorResponse} if there is insufficient capacity in the region
+   */
   async launchInstance(
     config: LaunchInstanceConfiguration
   ): Promise<LaunchInstance> {
@@ -143,6 +165,11 @@ export class LambdaCloudAPI extends BaseAPI {
     );
   }
 
+  /**
+   * Terminate instances
+   * @param instanceIds list of instance IDs to terminate
+   * @returns object with list of terminated instances
+   */
   async terminateInstances(
     instanceIds: string[] | string
   ): Promise<TerminatedInstances> {
@@ -154,6 +181,12 @@ export class LambdaCloudAPI extends BaseAPI {
     );
   }
 
+  /**
+   * Restart instances
+   * @param instanceIds list of instance IDs to restart
+   * @returns object with list of restarted instances
+   * @throws {ErrorResponse} if invalid parameters or missing permissions
+   */
   async restartInstances(instanceIds: string[]): Promise<RestartedInstances> {
     return fetcher<RestartedInstances>(
       this.configuration,
@@ -163,10 +196,21 @@ export class LambdaCloudAPI extends BaseAPI {
     );
   }
 
+  /**
+   * List SSH keys
+   * @returns list of SSH keys, or an empty array if there are none
+   * @throws {ErrorResponse} if missing permissions
+   */
   async listSSHKeys(): Promise<SSHKey[]> {
     return fetcher<SSHKey[]>(this.configuration, "/ssh-keys", "GET");
   }
 
+  /**
+   * Add a new SSH key
+   * @param config SSH key configuration. If `public_key` is not provided, a new key pair will be generated and the private key will be returned.
+   * @returns the SSH key, with the private key if it was generated
+   * @throws {ErrorResponse} if invalid parameters or missing permissions
+   */
   async addSSHKey(
     config: AddSSHKeyConfiguration
   ): Promise<SSHKeyWithPrivateKey | SSHKey> {
@@ -178,10 +222,20 @@ export class LambdaCloudAPI extends BaseAPI {
     );
   }
 
+  /**
+   * Delete an SSH key
+   * @param id the ID of the SSH key to delete
+   * @returns nothing
+   * @throws {ErrorResponse} if the SSH key does not exist or missing permissions
+   */
   async deleteSSHKey(id: string): Promise<void> {
     return fetcher<void>(this.configuration, `/ssh-keys/${id}`, "DELETE");
   }
 
+  /**
+   * List file systems
+   * @returns list of file systems, or an empty array if there are none
+   */
   async listFileSystems(): Promise<FileSystem[]> {
     return fetcher<FileSystem[]>(this.configuration, "/file-systems", "GET");
   }
