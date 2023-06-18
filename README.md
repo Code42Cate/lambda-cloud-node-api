@@ -1,6 +1,6 @@
 # Lambda Cloud Node.js API
 
-This is a unofficial Node.js client for the [Lambda Cloud API](https://cloud.lambdalabs.com/api/v1/docs)
+This is an unofficial Node.js client for the [Lambda Cloud API](https://cloud.lambdalabs.com/api/v1/docs)
 
 
 ## Installation
