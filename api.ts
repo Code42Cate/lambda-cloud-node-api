@@ -49,7 +49,7 @@ export interface ListInstanceTypes {
   };
 }
 
-export interface RunningInstance {
+export interface Instance {
   id: string;
   name: string;
   ip: string;
@@ -63,10 +63,8 @@ export interface RunningInstance {
   jupyter_url: string;
 }
 
-export interface GetRunningInstance {}
-
 export interface ListRunningInstances {
-  [key: string]: RunningInstance;
+  [key: string]: Instance;
 }
 
 export interface SSHKey {
@@ -109,6 +107,14 @@ export interface FileSystem {
   is_in_use: Boolean;
 }
 
+export interface RestartedInstances {
+  restarted_instances: Instance[];
+}
+
+export interface TerminatedInstances {
+  terminated_instances: Instance[];
+}
+
 export class LambdaCloudAPI extends BaseAPI {
   async listInstanceTypes(): Promise<ListInstanceTypes> {
     return fetcher<ListInstanceTypes>(
@@ -118,16 +124,12 @@ export class LambdaCloudAPI extends BaseAPI {
     );
   }
 
-  async listRunningInstances(): Promise<RunningInstance[]> {
-    return fetcher<RunningInstance[]>(this.configuration, "/instances", "GET");
+  async listRunningInstances(): Promise<Instance[]> {
+    return fetcher<Instance[]>(this.configuration, "/instances", "GET");
   }
 
-  async getRunningInstance(id: string): Promise<GetRunningInstance> {
-    return fetcher<GetRunningInstance>(
-      this.configuration,
-      `/instances/${id}`,
-      "GET"
-    );
+  async getRunningInstance(id: string): Promise<Instance> {
+    return fetcher<Instance>(this.configuration, `/instances/${id}`, "GET");
   }
 
   async launchInstance(config: LaunchInstanceConfiguration): Promise<string[]> {
@@ -139,8 +141,10 @@ export class LambdaCloudAPI extends BaseAPI {
     );
   }
 
-  async terminateInstances(instanceIds: string[] | string): Promise<string[]> {
-    return fetcher<string[]>(
+  async terminateInstances(
+    instanceIds: string[] | string
+  ): Promise<TerminatedInstances> {
+    return fetcher<TerminatedInstances>(
       this.configuration,
       "/instance-operations/terminate",
       "POST",
@@ -148,8 +152,8 @@ export class LambdaCloudAPI extends BaseAPI {
     );
   }
 
-  async restartInstances(instanceIds: string[]): Promise<string[]> {
-    return fetcher<string[]>(
+  async restartInstances(instanceIds: string[]): Promise<RestartedInstances> {
+    return fetcher<RestartedInstances>(
       this.configuration,
       "/instance-operations/restart",
       "POST",
