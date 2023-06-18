@@ -63,27 +63,23 @@ export interface Instance {
   jupyter_url: string;
 }
 
-export interface ListRunningInstances {
-  [key: string]: Instance;
-}
-
 export interface SSHKey {
   id: string;
   name: string;
   public_key: string;
 }
 
-export interface ListSSHKeys {
-  [key: string]: SSHKey;
-}
-
 export interface LaunchInstanceConfiguration {
   region_name: string;
   instance_type_name: string;
-  ssh_key_name: [string];
+  ssh_key_names: [string];
   file_system_names?: string[];
   quantity?: number;
   name: string | null;
+}
+
+export interface LaunchInstance {
+  instance_ids: string[];
 }
 
 export interface AddSSHKeyConfiguration {
@@ -132,8 +128,10 @@ export class LambdaCloudAPI extends BaseAPI {
     return fetcher<Instance>(this.configuration, `/instances/${id}`, "GET");
   }
 
-  async launchInstance(config: LaunchInstanceConfiguration): Promise<string[]> {
-    return fetcher<string[]>(
+  async launchInstance(
+    config: LaunchInstanceConfiguration
+  ): Promise<LaunchInstance> {
+    return fetcher<LaunchInstance>(
       this.configuration,
       "/instance-operations/launch",
       "POST",
@@ -161,8 +159,8 @@ export class LambdaCloudAPI extends BaseAPI {
     );
   }
 
-  async listSSHKeys(): Promise<ListSSHKeys> {
-    return fetcher<ListSSHKeys>(this.configuration, "/ssh-keys", "GET");
+  async listSSHKeys(): Promise<SSHKey[]> {
+    return fetcher<SSHKey[]>(this.configuration, "/ssh-keys", "GET");
   }
 
   async addSSHKey(config: AddSSHKeyConfiguration): Promise<SSHKey> {
