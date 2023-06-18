@@ -1,0 +1,32 @@
+{
+  "name": "lambda-cloud-node-api",
+  "version": "1.0.0",
+  "description": "Unofficial Node.js client for the Lambda Cloud API",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:code42cate/lambda-cloud-node-api.git"
+  },
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prepublish": "tsc",
+    "build": "tsc"
+  },
+  "keywords": [
+    "lambdalabs",
+    "lambda",
+    "lambda cloud",
+    "cloud",
+    "nodejs",
+    "api"
+  ],
+  "author": "Jonas Scholz",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.3.1",
+    "typescript": "^5.1.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
